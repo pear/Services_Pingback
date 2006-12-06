@@ -36,7 +36,7 @@ A package implemented of Pingback in PHP, able to sending and receiving a pingba
 EOT;
 
 $notes = <<<EOT
-* Fixed bug #9506: Use HTTP_Request to know if an URI is valid
+* Fixed bug #9506: Use HTTP_Request to know if an URI is valid (patch by Pablo Fischer <pfischer@php.net>)
 EOT;
 
 // Some hard-coded stuffs.
@@ -59,7 +59,6 @@ $pkg->addMaintainer('lead', 'freq', 'Farid Sadudin', 'farid.santi@gmail.com');
 // Core dependencies.
 $pkg->setPhpDep('4.3.0');
 $pkg->setPearinstallerDep('1.4.0');
-$pkg->addExtensionDep('required', 'gd');
 
 // Add package dependencies.
 $pkg->addPackageDepWithChannel(
