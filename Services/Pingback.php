@@ -15,7 +15,7 @@
  *
  * BSD License
  *
- * Copyright (c) 2005 Firman Wandayandi
+ * Copyright (c) 2005-2006 Firman Wandayandi <firman@php.net>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -48,7 +48,7 @@
  * @category Web Services
  * @package Services_Pingback
  * @author Firman Wandayandi <firman@php.net>
- * @copyright Copyright (c) 2005 Firman Wandayandi
+ * @copyright Copyright (c) 2005-2006 Firman Wandayandi <firman@php.net>
  * @license http://www.opensource.org/licenses/bsd-license.php
  *          BSD License
  * @version CVS: $Id$
@@ -154,7 +154,7 @@ $GLOBALS['_Services_Pingback_server'] = null;
  * @category Web Services
  * @package Services_Pingback
  * @author Firman Wandayandi <firman@php.net>
- * @copyright Copyright (c) 2005 Firman Wandayandi
+ * @copyright Copyright (c) 2005-2006 Firman Wandayandi <firman@php.net>
  * @license http://www.opensource.org/licenses/bsd-license.php
  *          BSD License
  * @version Release: @package_version@
@@ -723,12 +723,27 @@ class Services_Pingback
      * @return bool TRUE if exist, otherwise FALSE.
      * @access public
      * @static
+     * @author Pablo Fischer <pfischer@php.net>
      */
     function isURIExist($uri)
     {
-        if (is_resource(@fopen($uri, 'r'))) {
+        $params = array(
+            'timeout'           => 3,
+            'allowRedirects'    => true,
+            'maxRedirects'      => 2,
+        );
+
+        $req = new HTTP_Request($uri, $params);
+
+        $req->sendRequest();
+        if (PEAR::isError($req)) {
+            return false;
+        }
+
+        if ($req->getResponseCode() == 200) {
             return true;
         }
+
         return false;
     }
 
@@ -983,4 +998,15 @@ class Services_Pingback
 
     // }}}
 }
+
+// }}}
+
+/*
+ * Local variables:
+ * mode: php
+ * tab-width: 4
+ * c-basic-offset: 4
+ * c-hanging-comment-ender-p: nil
+ * End:
+ */
 ?>
