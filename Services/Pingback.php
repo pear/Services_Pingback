@@ -241,6 +241,14 @@ class Services_Pingback
      */
     var $_sourceContext = '';
 
+    /**
+     * XML_RPC error object if available.
+     *
+     * @var object
+     * @access private
+     */
+    var $_XML_RPC_Error = null;
+
     // }}}
     // {{{ Constructor
 
@@ -574,7 +582,17 @@ class Services_Pingback
 
         $cli = new XML_RPC_Client($path, $url->protocol . '://' . $url->host, $url->port);
         $cli->setDebug((int) $this->_options['debug']);
-        $res = $cli->send($msg);
+
+        // Set error mode to callback, since XML_RPC doesn't return error object on failure.
+        PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, array($this, 'XML_RPC_ErrorCallback'));
+
+        $res = $cli->send($msg, (int) $this->_options['timeout']);
+
+        // Cacth the error if any.
+        if ($this->_isXML_RPC_Error()) {
+            return $this->_XML_RPC_Error;
+        }
+
         $val = $res->value();
         if (!is_object($val) || !is_a($val, 'XML_RPC_value')) {
             return PEAR::raiseError('Response Error: ' . $res->faultString());
@@ -994,6 +1012,39 @@ class Services_Pingback
         $Services_Pingback_server->fetchSourceContext();
 
         return new XML_RPC_Response(new XML_RPC_Value('Pingback from ' . $sourceURI . ' success'));
+    }
+
+    // }}}
+    // {{{ XML_RPC_ErrorCallback()
+
+    /**
+     * A callback to grabs the XML_RPC raised error, assign to PEAR error mode
+     * PEAR_ERROR_CALLBACK.
+     *
+     * @param object $error PEAR_Error object.
+     *
+     * @access public
+     * @internal
+     */
+    function XML_RPC_ErrorCallback($error)
+    {
+        $this->_XML_RPC_Error = $error;
+    }
+
+    // }}}
+    // {{{ isXML_PRC_Error()
+
+    /**
+     * Find the whether if XML_RPC have an error or not.
+     *
+     * @return bool
+     */
+    function _isXML_RPC_Error()
+    {
+        if (PEAR::isError($this->_XML_RPC_Error)) {
+            return true;
+        }
+        return false;
     }
 
     // }}}
