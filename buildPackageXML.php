@@ -36,7 +36,7 @@ A package implemented of Pingback in PHP, able to sending and receiving a pingba
 EOT;
 
 $notes = <<<EOT
-* Fixed bug #9506: Use HTTP_Request to know if an URI is valid (patch by Pablo Fischer <pfischer@php.net>)
+* Fixed bug #11560: Timeout of pingback server not handled
 EOT;
 
 // Some hard-coded stuffs.
@@ -44,8 +44,8 @@ $pkg->setPackage('Services_Pingback');
 $pkg->setSummary($summary);
 $pkg->setDescription($desc);
 $pkg->setChannel('pear.php.net');
-$pkg->setAPIVersion('0.2');
-$pkg->setReleaseVersion('0.2.1');
+$pkg->setAPIVersion('0.2.1');
+$pkg->setReleaseVersion('0.2.2');
 $pkg->setReleaseStability('alpha');
 $pkg->setAPIStability('alpha');
 $pkg->setNotes($notes);
