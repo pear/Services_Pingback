@@ -583,6 +583,10 @@ class Services_Pingback
         $cli = new XML_RPC_Client($path, $url->protocol . '://' . $url->host, $url->port);
         $cli->setDebug((int) $this->_options['debug']);
 
+        // save the current error handling in buffer for restore.
+        $default_error_mode = $GLOBALS['_PEAR_default_error_mode'];
+        $default_error_options = $GLOBALS['_PEAR_default_error_options'];
+
         // Set error mode to callback, since XML_RPC doesn't return error object on failure.
         PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, array($this, 'XML_RPC_ErrorCallback'));
 
@@ -597,6 +601,9 @@ class Services_Pingback
         if (!is_object($val) || !is_a($val, 'XML_RPC_value')) {
             return PEAR::raiseError('Response Error: ' . $res->faultString());
         }
+
+        // restore the current error handling.
+        PEAR::setErrorHandling($default_error_mode, $default_error_options);
 
         return XML_RPC_decode($val);
     }
@@ -1038,6 +1045,7 @@ class Services_Pingback
      * Find the whether if XML_RPC have an error or not.
      *
      * @return bool
+     * @access private
      */
     function _isXML_RPC_Error()
     {
