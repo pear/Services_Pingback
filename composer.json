@@ -1,0 +1,36 @@
+{
+    "authors": [
+        {
+            "email": "firman@php.net",
+            "name": "Firman Wandayandi",
+            "role": "Lead"
+        },
+        {
+            "email": "farid.santi@gmail.com",
+            "name": "Farid Sadudin",
+            "role": "Lead"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Services_Pingback": "./"
+        }
+    },
+    "description": "More info available on: http://pear.php.net/package/Services_Pingback",
+    "include-path": [
+        "./"
+    ],
+    "license": "BSD License",
+    "name": "pear/services_pingback",
+    "support": {
+        "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=Services_Pingback",
+        "source": "https://github.com/pear/Services_Pingback"
+    },
+    "type": "library",
+    "require": {
+        "pear/pear_exception": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    }
+}
